@@ -1,20 +1,18 @@
 package com.ptms.app.dao;
-
 import com.ptms.app.model.Client;
-
+import java.sql.SQLException;
 import java.util.List;
-
 public interface ClientDao {
 
-    boolean addClient(Client client);
+    int insert(Client client) throws SQLException;
 
-    boolean updateClient(Client client);
+    Client findById(int id) throws SQLException;
 
-    boolean deleteClient(int clientId);
+    List<Client> findAll() throws SQLException;
 
-    Client getClientById(int clientId);
+    List<Client> searchByName(String keyword) throws SQLException;
 
-    List<Client> getAllClients();
+    int update(Client client) throws SQLException;
 
-    List<Client> searchClients(String keyword);
+    int delete(int id) throws SQLException;
 }

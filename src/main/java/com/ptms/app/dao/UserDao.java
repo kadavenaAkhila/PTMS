@@ -2,21 +2,24 @@ package com.ptms.app.dao;
 
 import com.ptms.app.model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDao {
 
-    int createUser(User user);
+    int insert(User user) throws SQLException;
 
-    User getUserById(int id);
+    User findById(int id) throws SQLException;
 
-    User getUserByEmail(String email);
+    User findByUsername(String username) throws SQLException;
 
-    List<User> getAllUsers();
+    List<User> findAll() throws SQLException;
 
-    List<User> searchUsers(String keyword);
+    List<User> searchByName(String keyword) throws SQLException;
 
-    boolean updateUser(User user);
+    List<User> findByRole(User.Role role) throws SQLException;
 
-    boolean deleteUser(int id);
+    int update(User user) throws SQLException;
+
+    int delete(int id) throws SQLException;
 }

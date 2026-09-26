@@ -2,23 +2,24 @@ package com.ptms.app.dao;
 
 import com.ptms.app.model.Project;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ProjectDao {
 
-    boolean addProject(Project project);
+    int insert(Project project) throws SQLException;
 
-    boolean updateProject(Project project);
+    Project findById(int id) throws SQLException;
 
-    boolean deleteProject(int projectId);
+    List<Project> findAll() throws SQLException;
 
-    Project getProjectById(int projectId);
+    List<Project> findByManagerId(int managerId) throws SQLException;
 
-    List<Project> getAllProjects();
+    List<Project> findByTeamLeadId(int teamLeadId) throws SQLException;
 
-    List<Project> searchProjects(String keyword);
+    List<Project> findByClientId(int clientId) throws SQLException;
 
-    List<Project> getProjectsByManager(int managerId);
+    int update(Project project) throws SQLException;
 
-    List<Project> getProjectsByClient(int clientId);
+    int delete(int id) throws SQLException;
 }
