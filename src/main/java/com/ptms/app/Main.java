@@ -10,6 +10,7 @@ import com.ptms.app.model.User;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * The one entry point that actually runs the app.
@@ -18,6 +19,8 @@ import java.util.Scanner;
  */
 public class Main {
 
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         UserController userController = new UserController();
@@ -25,11 +28,11 @@ public class Main {
         User loggedInUser = null;
 
         while (loggedInUser == null) {
-            System.out.println("\n=== PTMS ===");
-            System.out.println("1. Login");
-            System.out.println("2. Register");
-            System.out.println("0. Exit");
-            System.out.print("Choose an option: ");
+            logger.info("\n=== PTMS ===");
+            logger.info("1. Login");
+            logger.info("2. Register");
+            logger.info("0. Exit");
+            logger.info("Choose an option: ");
 
             String choice = scanner.nextLine().trim();
             try {
@@ -37,14 +40,14 @@ public class Main {
                     case "1" -> loggedInUser = userController.login();
                     case "2" -> loggedInUser = userController.registerUser();
                     case "0" -> {
-                        System.out.println("Goodbye.");
+                        logger.info("Goodbye.");
                         return;
                     }
-                    default -> System.out.println("Invalid option, try again.");
+                    default -> logger.info("Invalid option, try again.");
                 }
             } catch (SQLException e) {
-                System.out.println("Database error: " + e.getMessage());
-                System.out.println("Check DBConnection / db.properties and that MySQL is running.");
+                logger.severe("Database error: " + e.getMessage());
+                logger.info("Check DBConnection / db.properties and that MySQL is running.");
             }
         }
 
@@ -61,15 +64,15 @@ public class Main {
         boolean running = true;
 
         while (running) {
-            System.out.println("\n=== Dashboard (" + loggedInUser.getUsername() + " / " + loggedInUser.getRole() + ") ===");
-            System.out.println("1. User Management");
-            System.out.println("2. Client Management");
-            System.out.println("3. Project Management");
-            System.out.println("4. Project Members");
-            System.out.println("5. Ticket Management");
-            System.out.println("6. Ticket Tracking (view only)");
-            System.out.println("0. Logout");
-            System.out.print("Choose an option: ");
+            logger.info("\n=== Dashboard (" + loggedInUser.getUsername() + " / " + loggedInUser.getRole() + ") ===");
+            logger.info("1. User Management");
+            logger.info("2. Client Management");
+            logger.info("3. Project Management");
+            logger.info("4. Project Members");
+            logger.info("5. Ticket Management");
+            logger.info("6. Ticket Tracking (view only)");
+            logger.info("0. Logout");
+            logger.info("Choose an option: ");
 
             String choice = scanner.nextLine().trim();
             switch (choice) {
@@ -80,10 +83,10 @@ public class Main {
                 case "5" -> ticketController.showMenu(loggedInUser);
                 case "6" -> ticketTrackingController.showMenu(loggedInUser);
                 case "0" -> {
-                    System.out.println("Logged out.");
+                    logger.info("Logged out.");
                     running = false;
                 }
-                default -> System.out.println("Invalid option, try again.");
+                default -> logger.info("Invalid option, try again.");
             }
         }
     }
