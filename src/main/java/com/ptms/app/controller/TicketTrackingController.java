@@ -36,11 +36,11 @@ public class TicketTrackingController {
     public void showMenu(User loggedInUser) {
         boolean running = true;
         while (running) {
-            logger.info("\n--- Ticket Tracking (view only) ---");
-            logger.info("1. View tracking for a ticket");
-            logger.info("2. View my recent updates");
-            logger.info("0. Back");
-            logger.info("Choose an option: ");
+            System.out.println("\n--- Ticket Tracking (view only) ---");
+            System.out.println("1. View tracking for a ticket");
+            System.out.println("2. View my recent updates");
+            System.out.println("0. Back");
+            System.out.println("Choose an option: ");
 
             String choice = scanner.nextLine().trim();
             try {
@@ -48,20 +48,20 @@ public class TicketTrackingController {
                     case "1" -> viewTrackingForTicket();
                     case "2" -> viewMyUpdates(loggedInUser);
                     case "0" -> running = false;
-                    default -> logger.info("Invalid option, try again.");
+                    default -> System.out.println("Invalid option, try again.");
                 }
             } catch (ResourceNotFoundException e) {
                 logger.warning("Ticket tracking lookup failed: " + e.getMessage());
-                logger.info("Error: " + e.getMessage());
+                System.out.println("Error: " + e.getMessage());
             } catch (SQLException e) {
                 logger.log(Level.SEVERE, "Database error in TicketTrackingController", e);
-                logger.info("Database error: " + e.getMessage());
+                System.out.println("Database error: " + e.getMessage());
             }
         }
     }
 
     private void viewTrackingForTicket() throws SQLException {
-        logger.info("Ticket id: ");
+        System.out.println("Ticket id: ");
         int ticketId = Integer.parseInt(scanner.nextLine().trim());
         TicketTracking tracking = ticketTrackingService.getTrackingForTicket(ticketId);
         printTrackingSummary(tracking);
@@ -70,14 +70,14 @@ public class TicketTrackingController {
     private void viewMyUpdates(User requestingUser) throws SQLException {
         List<TicketTracking> updates = ticketTrackingService.getUpdatesByUser(requestingUser.getId());
         if (updates.isEmpty()) {
-            logger.info("You haven't updated any tickets yet.");
+            System.out.println("You haven't updated any tickets yet.");
             return;
         }
         updates.forEach(this::printTrackingSummary);
     }
 
     private void printTrackingSummary(TicketTracking tracking) {
-        logger.info(String.format("ticketId=%d | status=%s | progress=%d%% | updatedBy=%s | updatedAt=%s | comment=%s",
+        System.out.println(String.format("ticketId=%d | status=%s | progress=%d%% | updatedBy=%s | updatedAt=%s | comment=%s",
                 tracking.getTicketId(), tracking.getStatus(), tracking.getProgress(),
                 tracking.getUpdatedBy(), tracking.getUpdatedAt(), tracking.getComment()));
     }

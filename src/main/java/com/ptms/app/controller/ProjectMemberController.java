@@ -34,13 +34,13 @@ public class ProjectMemberController {
     public void showMenu(User loggedInUser) {
         boolean running = true;
         while (running) {
-            logger.info("\n--- Project Members ---");
-            logger.info("1. Add member to project");
-            logger.info("2. Remove member from project");
-            logger.info("3. View members of a project");
-            logger.info("4. View my project memberships");
-            logger.info("0. Back");
-            logger.info("Choose an option: ");
+            System.out.println("\n--- Project Members ---");
+            System.out.println("1. Add member to project");
+            System.out.println("2. Remove member from project");
+            System.out.println("3. View members of a project");
+            System.out.println("4. View my project memberships");
+            System.out.println("0. Back");
+            System.out.println("Choose an option: ");
 
             String choice = scanner.nextLine().trim();
             try {
@@ -50,46 +50,46 @@ public class ProjectMemberController {
                     case "3" -> viewMembersOfProject();
                     case "4" -> viewMyMemberships(loggedInUser);
                     case "0" -> running = false;
-                    default -> logger.info("Invalid option, try again.");
+                    default -> System.out.println("Invalid option, try again.");
                 }
             } catch (UnauthorizedException | ValidationException | ResourceNotFoundException e) {
                 logger.warning("Project member action failed: " + e.getMessage());
-                logger.info("Error: " + e.getMessage());
+                System.out.println("Error: " + e.getMessage());
             } catch (SQLException e) {
                 logger.log(Level.SEVERE, "Database error in ProjectMemberController", e);
-                logger.info("Database error: " + e.getMessage());
+                System.out.println("Database error: " + e.getMessage());
             }
         }
     }
 
     private void addMember(User requestingUser) throws SQLException {
-        logger.info("Project id: ");
+        System.out.println("Project id: ");
         int projectId = Integer.parseInt(scanner.nextLine().trim());
-        logger.info("User id to add: ");
+        System.out.println("User id to add: ");
         int userId = Integer.parseInt(scanner.nextLine().trim());
-        logger.info("Role in project (e.g. TEAM_MEMBER): ");
+        System.out.println("Role in project (e.g. TEAM_MEMBER): ");
         String role = scanner.nextLine().trim();
 
         projectMemberService.addMember(projectId, userId, role, requestingUser);
-        logger.info("Member added.");
+        System.out.println("Member added.");
     }
 
     private void removeMember(User requestingUser) throws SQLException {
-        logger.info("Project id: ");
+        System.out.println("Project id: ");
         int projectId = Integer.parseInt(scanner.nextLine().trim());
-        logger.info("User id to remove: ");
+        System.out.println("User id to remove: ");
         int userId = Integer.parseInt(scanner.nextLine().trim());
 
         projectMemberService.removeMember(projectId, userId, requestingUser);
-        logger.info("Member removed.");
+        System.out.println("Member removed.");
     }
 
     private void viewMembersOfProject() throws SQLException {
-        logger.info("Project id: ");
+        System.out.println("Project id: ");
         int projectId = Integer.parseInt(scanner.nextLine().trim());
         List<ProjectMember> members = projectMemberService.getMembersOfProject(projectId);
         if (members.isEmpty()) {
-            logger.info("No members found for this project.");
+            System.out.println("No members found for this project.");
             return;
         }
         members.forEach(this::printMemberSummary);
@@ -98,14 +98,14 @@ public class ProjectMemberController {
     private void viewMyMemberships(User requestingUser) throws SQLException {
         List<ProjectMember> memberships = projectMemberService.getProjectsForMember(requestingUser.getId());
         if (memberships.isEmpty()) {
-            logger.info("You are not a member of any project.");
+            System.out.println("You are not a member of any project.");
             return;
         }
         memberships.forEach(this::printMemberSummary);
     }
 
     private void printMemberSummary(ProjectMember member) {
-        logger.info(String.format("projectId=%d | userId=%d | role=%s | joinedAt=%s",
+        System.out.println(String.format("projectId=%d | userId=%d | role=%s | joinedAt=%s",
                 member.getProjectId(), member.getUserId(), member.getRoleInProject(), member.getJoinedAt()));
     }
 }
